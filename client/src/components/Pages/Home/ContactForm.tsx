@@ -1,4 +1,4 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext, useEffect} from 'react'
 import {ContactContext} from '../../../context/contact/contactContext';
 import {
     TextField,
@@ -7,16 +7,35 @@ import {
     Typography,
     Button,
 } from '@material-ui/core';
-import useStyle from '../SignIn/formstyles';
+import useStyle from '../Auth/formstyles';
+
 const ContactForm = () => {
+
     const classes = useStyle();
     const contactContext = useContext(ContactContext);
+    const {addContact, current,clearCurrent, updateContact} = contactContext;
     const[contact,setContact] = useState({
         name:'',
         email:'',
         phone:'',
         type:'personal',
-    })
+    });
+    const clearAll = ()=>{
+        setContact({ 
+            name:'',
+            email:'',
+            phone:'',
+            type:'personal',
+           });
+    }
+    useEffect(()=>{
+        if(current!==null){
+            setContact(current);
+        }else{
+            clearAll();
+        }
+    },[contactContext, current])
+
     const{name, email, phone,type} = contact;
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>)=>{
@@ -26,18 +45,19 @@ const ContactForm = () => {
     }
     const submitHandler = (e: React.SyntheticEvent) =>{
         e.preventDefault();
-        contactContext.addContact(contact)
-        setContact({ 
-        name:'',
-        email:'',
-        phone:'',
-        type:'personal',
-       });
+        if(current===null){
+            addContact(contact);
+        }else{
+            updateContact(contact);
+        }
+        clearAll();
+        clearCurrent();
     }
+   
     return (
         <div className={classes.paper}>
                             <Typography component='h1' variant='h5'>
-                                Add Contact
+                                {current?"Edit Contact":"Add Contact"}
                             </Typography>
                             <form className={classes.form} onSubmit={submitHandler} autoComplete='off'>
                                 <TextField
@@ -111,8 +131,19 @@ const ContactForm = () => {
                                     color='primary'
                                     className={classes.submit}
                                 >
-                                    Submit
+                                      {current?"Update":"Submit"}
                                 </Button>
+                                {current && 
+                                <div>
+                                    <Button
+                                        onClick ={()=>clearCurrent()}
+                                        fullWidth
+                                        variant='outlined'
+                                        color='secondary' 
+                                    >
+                                        Clear
+                                    </Button>
+                                </div>}
                             </form>
                         </div>
     )

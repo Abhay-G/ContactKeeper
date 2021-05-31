@@ -1,25 +1,40 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {Container, Avatar,TextField,FormControlLabel,Checkbox, Link, Grid, Typography, Button, CssBaseline} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyle from "./formstyles";
 const Form: React.FC = ()=> {
     const classes = useStyle();
+    const [user, setUser] = useState({
+      email:'',
+      password:''
+  })
+  const { email, password} = user;
+
+  const changeHandler = (e:React.ChangeEvent<HTMLInputElement>)=>{
+      setUser({...user,[e.target.name]:e.target.value});
+  }
+  const submitHandler = (e:React.SyntheticEvent)=>{
+     e.preventDefault();
+     console.log('Login');
+
+  }
     return (
         <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <div className={classes.paper}>
+        <div className={classes.papersignIn}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form}>
+          <form className={classes.form} onSubmit={submitHandler}>
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
+              onChange={changeHandler}
               id="email"
               label="Email Address"
               name="email"
@@ -31,6 +46,7 @@ const Form: React.FC = ()=> {
               margin="normal"
               required
               fullWidth
+              onChange={changeHandler}
               name="password"
               label="Password"
               type="password"

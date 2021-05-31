@@ -82,7 +82,7 @@ router.put('/:id', auth, async (req, res) => {
     }
 });
 
-//@route    PUT api/contacts/:id
+//@route    Delete api/contacts/:id
 //@desc     Delete Contact
 //@accesss  Private
 

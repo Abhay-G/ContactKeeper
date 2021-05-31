@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
+
     navbar: {
         backgroundColor: '#1a1a2e',
     },
@@ -7,9 +8,7 @@ const useStyles = makeStyles((theme) => ({
         color:"white",
         textDecoration: "none",
     },
-    about:{
-      position: "absolute",
-      right:"20px",
+    links:{
       color:"white",
       textDecoration: "none",
 
