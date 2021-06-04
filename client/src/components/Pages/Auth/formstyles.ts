@@ -8,6 +8,10 @@ const useStyle = makeStyles((theme)=>({
         flexDirection: 'column',
         alignItems: 'center',
       },
+      link:{
+        textDecoration:"none",
+        
+      },
       papersignIn: {
         marginTop: theme.spacing(8),
         display: 'flex',

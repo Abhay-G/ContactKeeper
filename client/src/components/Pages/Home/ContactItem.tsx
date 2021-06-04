@@ -28,7 +28,7 @@ const ContactItem:React.FC<Prop> = ({contact}) => {
     if(contact.type=== "professional")personal = false;
     return (
         <div>
-        <Card className={classes.card} >
+        <Card elevation={4} className={classes.card} >
             <CardContent>
                 <div className={classes.avatardiv}>
                 <Avatar>{contact.name.charAt(0).toUpperCase()}</Avatar>

@@ -1,15 +1,30 @@
-import React,{useState} from 'react';
-import {Container, Avatar,TextField,FormControlLabel,Checkbox, Link, Grid, Typography, Button, CssBaseline} from '@material-ui/core'
+import React,{useState,useContext,useEffect} from 'react';
+import {useHistory,Link as Linkk} from 'react-router-dom';
+import {AlertContext} from '../../../context/alert/AlertContext';
+import {AuthContext} from '../../../context/auth/AuthContext';
+import {Container,Typography,Button,Link,Grid, Avatar,TextField, CssBaseline} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyle from "./formstyles";
+
+ 
+
 const Form: React.FC = ()=> {
     const classes = useStyle();
-    // interface User{
-    //     name:string;
-    //     email:string;
-    //     password:string;
-    //     password2:string;
-    // };
+    const history = useHistory();
+    const alertContext = useContext(AlertContext);
+    const authContext = useContext(AuthContext);
+    const { setAlert } = alertContext;
+    const {register,error,clearErrors,isAuthenticated} = authContext;
+    useEffect(()=>{
+      if(isAuthenticated){
+         history.push('/');
+      }
+      if(error === 'User already exists'){
+       setAlert(error,'error');
+       clearErrors();
+      }
+      // eslint-disable-next-line
+    },[error,isAuthenticated,history]);
     const [user, setUser] = useState({
         name:'',
         email:'',
@@ -23,7 +38,20 @@ const Form: React.FC = ()=> {
     }
     const submitHandler = (e:React.SyntheticEvent)=>{
        e.preventDefault();
-       console.log('Register submit');
+       if(name===''||email===''|| password===''){
+         setAlert('Please enter all fields','warning');
+       }else if(password.length<6){
+        setAlert('Password is very short','info');
+       }else if(password!==password2){
+        setAlert('Passwords do not match','error');
+       }else{
+         register({
+           name,
+           email,
+           password,
+         })
+       }
+      
 
     }
     return (
@@ -40,7 +68,6 @@ const Form: React.FC = ()=> {
           <TextField
               variant="outlined"
               margin="normal"
-              required
               fullWidth
               onChange={changeHandler}
               id="name"
@@ -53,7 +80,6 @@ const Form: React.FC = ()=> {
             <TextField
               variant="outlined"
               margin="normal"
-              required
               fullWidth
               onChange={changeHandler}
               id="email"
@@ -66,7 +92,6 @@ const Form: React.FC = ()=> {
             <TextField
               variant="outlined"
               margin="normal"
-              required
               fullWidth
               onChange={changeHandler}
               name="password"
@@ -79,7 +104,6 @@ const Form: React.FC = ()=> {
             <TextField
               variant="outlined"
               margin="normal"
-              required
               fullWidth
               onChange={changeHandler}
               name="password2"
@@ -89,10 +113,10 @@ const Form: React.FC = ()=> {
               value ={password2}
               autoComplete="current-password"
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth
@@ -104,9 +128,7 @@ const Form: React.FC = ()=> {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Already have an account? Sign In"}
-                </Link>
+              <Linkk className={classes.link} to='/signin'>Already have an account? Sign In</Linkk>
               </Grid>
             </Grid>
           </form>

@@ -1,9 +1,27 @@
-import React,{useState} from 'react';
+import React,{useState,useContext,useEffect} from 'react';
 import {Container, Avatar,TextField,FormControlLabel,Checkbox, Link, Grid, Typography, Button, CssBaseline} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import {useHistory,Link as Linkk} from 'react-router-dom';
+import {AlertContext} from '../../../context/alert/AlertContext';
+import {AuthContext} from '../../../context/auth/AuthContext';
 import useStyle from "./formstyles";
 const Form: React.FC = ()=> {
     const classes = useStyle();
+    const alertContext = useContext(AlertContext);
+    const authContext = useContext(AuthContext);
+    const history = useHistory();
+    const { setAlert } = alertContext;
+    const {login,error,clearErrors,isAuthenticated} = authContext;
+    useEffect(()=>{
+      if(isAuthenticated){
+         history.push('/');
+      }
+      if(error === 'Invalid credentials'){
+       setAlert(error,'error');
+      //  clearErrors();
+      }
+      // eslint-disable-next-line
+    },[error,isAuthenticated,history]);
     const [user, setUser] = useState({
       email:'',
       password:''
@@ -15,7 +33,14 @@ const Form: React.FC = ()=> {
   }
   const submitHandler = (e:React.SyntheticEvent)=>{
      e.preventDefault();
-     console.log('Login');
+     if(email===''|| password===''){
+      setAlert('Please enter all fields','warning');
+    }else{
+      login({
+        email,
+        password,
+      })
+    }
 
   }
     return (
@@ -32,7 +57,6 @@ const Form: React.FC = ()=> {
             <TextField
               variant="outlined"
               margin="normal"
-              required
               fullWidth
               onChange={changeHandler}
               id="email"
@@ -44,7 +68,6 @@ const Form: React.FC = ()=> {
             <TextField
               variant="outlined"
               margin="normal"
-              required
               fullWidth
               onChange={changeHandler}
               name="password"
@@ -67,15 +90,13 @@ const Form: React.FC = ()=> {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
+              {/* <Grid item xs>
                 <Link href="#" variant="body2">
                   Forgot password?
                 </Link>
-              </Grid>
+              </Grid> */}
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                  <Linkk className={classes.link} to='/signup'> Don't have an account? Sign Up</Linkk>
               </Grid>
             </Grid>
           </form>
