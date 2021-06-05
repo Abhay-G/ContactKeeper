@@ -1,9 +1,16 @@
 export const reducer = (state, action) => {
     switch (action.type) {
+        case 'get_contacts':
+            return {
+                ...state,
+                contacts: action.payload,
+                loading: false,
+            };
         case 'add_contact':
             return {
                 ...state,
                 contacts: [...state.contacts, action.payload],
+                loading: false,
             };
         case 'delete_contact':
             return {
@@ -11,6 +18,15 @@ export const reducer = (state, action) => {
                 contacts: state.contacts.filter(
                     (contact) => contact.id !== action.payload
                 ),
+                loading: false,
+            };
+        case 'clear_contacts':
+            return {
+                ...state,
+                contacts: null,
+                filtered: null,
+                current: null,
+                error: null,
             };
         case 'set_current':
             return {
@@ -28,6 +44,7 @@ export const reducer = (state, action) => {
                 contacts: state.contacts.map((contact) =>
                     contact.id === action.payload.id ? action.payload : contact
                 ),
+                loading: false,
             };
         case 'filter_contacts':
             return {
@@ -38,11 +55,17 @@ export const reducer = (state, action) => {
                         contact.name.match(regex) || contact.email.match(regex)
                     );
                 }),
+                loading: false,
             };
         case 'clear_filter':
             return {
                 ...state,
                 filtered: null,
+            };
+        case 'contact_error':
+            return {
+                ...state,
+                error: action.payload,
             };
         default:
             return state;

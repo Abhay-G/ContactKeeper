@@ -1,6 +1,7 @@
 import React,{useContext} from 'react'
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../../../context/auth/AuthContext';
+import {ContactContext} from '../../../context/contact/contactContext'
 import Fab from '@material-ui/core/Fab';
 import {AppBar, Toolbar, Typography, Button, CssBaseline} from '@material-ui/core'
 import {PermContactCalendar,ExitToApp} from '@material-ui/icons';
@@ -9,9 +10,12 @@ import useStyles from './styles';
 export default function Navbar() {
     const classes = useStyles();
     const authContext = useContext(AuthContext);
+    const contactContext = useContext(ContactContext);
+    const {clearContacts} = contactContext;
     const {isAuthenticated,logout,user} = authContext;
     const  onLogout = () =>{
         logout();
+        clearContacts();
     }
     const authLinks = (
         <>
