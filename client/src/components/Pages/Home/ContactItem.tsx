@@ -6,7 +6,7 @@ import {Phone,Face} from '@material-ui/icons';
 import useStyles from './Citem';
 
 type Contact = {
-    id : any,
+    _id : any,
     name : string;
     email:string;
     phone:string;
@@ -21,7 +21,7 @@ const ContactItem:React.FC<Prop> = ({contact}) => {
     const contactContext = useContext(ContactContext);
     const {deleteContact,setCurrent, clearCurrent} = contactContext;
     const onDelete = () =>{
-      deleteContact(contact.id);
+      deleteContact(contact._id);
       clearCurrent(); 
     }
     let personal:boolean = true;

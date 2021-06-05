@@ -12,7 +12,7 @@ const Contacts:React.FC = () => {
     
   
     interface Contact{
-        id:any,
+        _id:any,
         name : string,
         email:string,
         phone:string,
